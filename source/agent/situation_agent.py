@@ -26,7 +26,7 @@ class SituationAgent:
             "message": response
         }
         if 'TERMINATE' in response:
-            response_data["end"] = 't'
+            response_data["end_situation"] = 't'
         if 'SWITCH_CONTEXT' in response:
             response_data['switch_context'] = 't'
         return response_data
