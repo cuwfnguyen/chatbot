@@ -23,11 +23,14 @@ class SituationAgent:
         print(conversation)
         response = service.situation_agent(conversation, agent_code)
         response_data = {
-            "message": response
+            "message": response,
+            "end_situation": "f",
+            "switch_context": "f"
         }
         if 'TERMINATE' in response:
             response_data["end_situation"] = 't'
         if 'SWITCH_CONTEXT' in response:
+            response_data["end_situation"] = 't'
             response_data['switch_context'] = 't'
         return response_data
 
