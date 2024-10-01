@@ -15,12 +15,11 @@ class SituationAgent:
         system_prompt = situation_prompt.get_agent_prompt(agent_code)
         additional_data = function_calling.get_additional_info(agent_code, self.additional_info)
 
-        conversation.append({
+        conversation.insert(0, {
             "role": "system",
             "content": system_prompt[0].get('agent_prompt') + additional_data
         })
         service = OpenAIServices()
-        print(conversation)
         response = service.situation_agent(conversation, agent_code)
         response_data = {
             "message": response,
