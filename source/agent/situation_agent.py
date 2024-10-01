@@ -1,20 +1,26 @@
 from ..prompt import situation_prompt
 from ..llm_provider.openai_service import OpenAIServices
+from ..llm_provider import function_calling
 
 class SituationAgent:
-    def __init__(self, agent_code: int, conversation:list):
+    def __init__(self, agent_code: int, conversation:list, additional_info: dict):
         self.agent_code = agent_code
         self.conversation = conversation
+        self.additional_info = additional_info
 
     def process_message(self):
         conversation = self.conversation
         agent_code = self.agent_code
+
         system_prompt = situation_prompt.get_agent_prompt(agent_code)
+        additional_data = function_calling.get_additional_info(agent_code, self.additional_info)
+
         conversation.append({
             "role": "system",
-            "content": system_prompt[0].get('agent_prompt')
+            "content": system_prompt[0].get('agent_prompt') + additional_data
         })
         service = OpenAIServices()
+        print(conversation)
         response = service.situation_agent(conversation, agent_code)
         response_data = {
             "message": response
