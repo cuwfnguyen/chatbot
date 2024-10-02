@@ -36,7 +36,6 @@ class OpenAIServices:
                 messages=conversation
             )
         assistant_message = response.choices[0].message.content
-        print(response)
         tool_calls = response.choices[0].message.tool_calls
         if tool_calls:
             for tool_call in tool_calls:
@@ -47,7 +46,6 @@ class OpenAIServices:
                 tool = self.function_calling_response_message(tool_call.id, result)
                 conversation.append(response.choices[0].message)
                 conversation.append(tool)
-            print(conversation)
             response_with_function_calling = self.client.chat.completions.create(
                 model='gpt-4o-mini',
                 messages=conversation,

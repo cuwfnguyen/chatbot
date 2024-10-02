@@ -51,9 +51,8 @@ def send_to_customer_service(order_id):
     return f"Cảm ơn bạn vì phản hồi với đơn hàng {order_id}. Chúng tôi đang xem xét và sớm trả lời."
 
 def get_additional_info(agent_code, additional_info):
-    if agent_code == 4:
-        return f"\nBạn có thể xem hình ảnh thật của sản phẩm {additional_info.get('product_name', '')} trên trang mua hàng."
-    else: return ''
+    return f"\nTên sản phẩm: {additional_info.get('product_name', '')}" \
+           f"\nMã đơn hàng {additional_info.get('order_id')}"
 
 
 def define_function(agent_code):

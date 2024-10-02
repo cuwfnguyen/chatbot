@@ -14,12 +14,16 @@ class SituationAgent:
 
         system_prompt = situation_prompt.get_agent_prompt(agent_code)
         additional_data = function_calling.get_additional_info(agent_code, self.additional_info)
-
         conversation.insert(0, {
             "role": "system",
-            "content": system_prompt[0].get('agent_prompt') + additional_data
+            "content": system_prompt[0].get('agent_prompt')
+        })
+        conversation.insert(1, {
+            "role": "user",
+            "content": additional_data
         })
         service = OpenAIServices()
+        print(conversation)
         response = service.situation_agent(conversation, agent_code)
         response_data = {
             "message": response,
@@ -31,5 +35,6 @@ class SituationAgent:
         if 'SWITCH_CONTEXT' in response:
             response_data["end_situation"] = 't'
             response_data['switch_context'] = 't'
+        print(response_data)
         return response_data
 
