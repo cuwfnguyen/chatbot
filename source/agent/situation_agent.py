@@ -11,16 +11,18 @@ class SituationAgent:
     def process_message(self):
         conversation = self.conversation
         agent_code = self.agent_code
-
-        system_prompt = situation_prompt.get_agent_prompt(agent_code)
-        additional_data = function_calling.get_additional_info(agent_code, self.additional_info)
+        additional_info = self.additional_info
+        if additional_info.get('product_name') or additional_info.get('order_id'):
+            intent_record = situation_prompt.get_agent_prompt(agent_code, True)
+            product_data = function_calling.product_information.get(additional_info.get('product_code'))
+            order_data = function_calling.order_information.get(additional_info.get('order_id'))
+            system_prompt = intent_record[0].get('agent_prompt').replace('<product_description>', str(product_data)).replace('<order_info>', str(order_data))
+        else:
+            intent_record = situation_prompt.get_agent_prompt(agent_code, False)
+            system_prompt = intent_record[0].get('agent_prompt')
         conversation.insert(0, {
             "role": "system",
-            "content": system_prompt[0].get('agent_prompt')
-        })
-        conversation.insert(1, {
-            "role": "user",
-            "content": additional_data
+            "content": system_prompt
         })
         service = OpenAIServices()
         print(conversation)

@@ -35,7 +35,9 @@ def execute_query(query, params=None):
         release_db_connection(conn)
 
 
-def get_agent_prompt(agent_code):
+def get_agent_prompt(agent_code, additional_info):
+    if additional_info:
+        agent_code = agent_code + 27
     query = f"select agent_prompt from intent_prompt where agent_code = {agent_code}"
     data = execute_query(query)
     return data

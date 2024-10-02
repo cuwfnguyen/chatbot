@@ -36,12 +36,14 @@ agent_options = {
 }
 
 product_options = {
+    'Không chọn': '',
     "Máy hút bụi": 1,
     "Máy rửa chén": 2,
     "Iphone 16 Promax": 3,
     "Điện thoại samsung galaxy s24 ultra": 5
 }
 order_options = {
+    "Không chọn": '',
     "Đơn hàng 1": 'Purchase01',
     "Đơn hàng 2": 'Purchase02',
     "Đơn hàng 3": 'Purchase03'
@@ -66,8 +68,8 @@ if prompt := st.chat_input("Nhập tin nhắn của bạn"):
         "message": st.session_state.messages,
         "agent_code": agent_code,
         "additional_info": {
-            "product_name": product_name,
-            "product_code": product_code,
+            "product_name": product_name if product_code else '',
+            "product_code": str(product_code),
             "order_id": order_code,
         }
     }
@@ -76,7 +78,7 @@ if prompt := st.chat_input("Nhập tin nhắn của bạn"):
     if bot_response.status_code == 200:
         results = bot_response.json()['response_data']
         response = results.get('message')
-        if results.get('end_situation') =='t':
+        if results.get('end_situation') == 't':
             response += ' Kết thúc tình huống / chuyển tình huống'
             clear = True
     else:
